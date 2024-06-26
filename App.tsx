@@ -6,7 +6,8 @@ import { HomePage } from "./screens/HomePage/HomePage";
 import { RegisterScreen } from "./screens/Register/RegisterScreen";
 import { LoginScreen } from "./screens/Login/LoginScreen";
 import ProfilScreen from "./screens/Profil/ProfilScreen";
-import WomenScreen from "./screens/WomenScreen/WomenScreen";
+import { WomenScreen } from "./screens/WomenScreen/WomenScreen";
+
 
 const Stack = createNativeStackNavigator();
 
@@ -72,6 +73,8 @@ export default function App() {
           }}
         />
       </Stack.Navigator>
+      
+        
     </NavigationContainer>
   );
 }
