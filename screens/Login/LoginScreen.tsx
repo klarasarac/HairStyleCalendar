@@ -20,8 +20,8 @@ import {
 } from "firebase/auth";
 
 export const LoginScreen: React.FC = () => {
-  const [email, setEmail] = useState<string | undefined>();
-  const [password, setPassword] = useState<string | undefined>();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   const nav = useNavigation<NativeStackNavigationProp<any>>();
 
@@ -43,6 +43,7 @@ export const LoginScreen: React.FC = () => {
         );
         // Handle successful login
         goToHome();
+        Keyboard.dismiss();
       } else {
         console.error("Email and password are required");
       }
@@ -52,7 +53,7 @@ export const LoginScreen: React.FC = () => {
   };
 
   return (
-    <Pressable style={styles.contentView} /* onPress={Keyboard.dismiss}*/>
+    <Pressable style={styles.contentView}>
       <SafeAreaView style={styles.contentView}>
         <View style={styles.container}>
           <View style={styles.titleContainer}>
@@ -67,7 +68,9 @@ export const LoginScreen: React.FC = () => {
               onChangeText={setEmail}
               autoCapitalize="none"
               keyboardType="email-address" //
+              
             />
+            
             <TextInput
               style={styles.loginTextField}
               placeholder="Password"
@@ -75,6 +78,7 @@ export const LoginScreen: React.FC = () => {
               value={password}
               onChangeText={setPassword}
               secureTextEntry
+              
             />
           </View>
           <View style={styles.buttonContainer}>

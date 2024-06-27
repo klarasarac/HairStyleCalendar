@@ -5,8 +5,10 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { HomePage } from "./screens/HomePage/HomePage";
 import { RegisterScreen } from "./screens/Register/RegisterScreen";
 import { LoginScreen } from "./screens/Login/LoginScreen";
-import ProfilScreen from "./screens/Profil/ProfilScreen";
+import  ProfilScreen from "./screens/Profil/ProfilScreen";
 import { WomenScreen } from "./screens/WomenScreen/WomenScreen";
+import { MenScreen} from "./screens/MenScreen/MenScreen";
+
 
 
 const Stack = createNativeStackNavigator();
@@ -14,6 +16,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
+    
       <StatusBar style="light" />
       <Stack.Navigator>
         <Stack.Screen
@@ -62,6 +65,19 @@ export default function App() {
         <Stack.Screen
           name="WomenScreen"
           component={WomenScreen}
+          options={{
+            title: "Hairstyles",
+            headerShown: true,
+            headerTintColor: "#ff5e3a",
+            headerTitleStyle: { color: "white" },
+            headerStyle: {
+              backgroundColor: "rgb(28 35 48)",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="MenScreen"
+          component={MenScreen}
           options={{
             title: "Hairstyles",
             headerShown: true,

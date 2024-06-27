@@ -22,7 +22,7 @@ const getDaysInMonth = () => {
   return eachDayOfInterval({ start, end }).map(date => format(date, 'EEE dd'));
 };
 
-export const WomenScreen: React.FC = () => {
+export const MenScreen: React.FC = () => {
   const [selectedService, setSelectedService] = useState<string | null>(null);
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -88,9 +88,9 @@ export const WomenScreen: React.FC = () => {
       <RNPickerSelect
         onValueChange={(value) => setSelectedService(value)}
         items={[
-          { label: "Hair Cut & Color", value: "hair_cut_color" },
+          { label: "Hair Cut & Shave", value: "hair_cut_shave" },
           { label: "Hair Cut", value: "hair_cut" },
-          { label: "Hair Color", value: "hair_color" },
+          { label: "Shave", value: "shave" },
         ]}
         style={pickerSelectStyles}
         placeholder={{ label: "Select a service...", value: null }}
@@ -262,4 +262,4 @@ const pickerSelectStyles = StyleSheet.create({
   },
 });
 
-export default WomenScreen;
+export default MenScreen;

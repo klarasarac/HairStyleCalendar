@@ -15,7 +15,9 @@ const ProfilScreen: React.FC = () => {
   const goToWomenHairstyles = async () => {
     nav.navigate("WomenScreen");
   };
-
+  const goToMenHairstyles = async () => {
+    nav.navigate("MenScreen");
+  };
   return (
     <View style={styles.container}>
       <ScrollView
@@ -29,7 +31,7 @@ const ProfilScreen: React.FC = () => {
           />
           <Text style={styles.cardTitle}>Women hairstyles</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.card}>
+        <TouchableOpacity style={styles.card} onPress={goToMenHairstyles}>
           <Image
             source={require("../../assets/men_hairstyles.png")}
             style={styles.image}

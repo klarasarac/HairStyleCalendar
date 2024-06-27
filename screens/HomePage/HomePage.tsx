@@ -41,11 +41,11 @@ export const HomePage: React.FC = () => {
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
         <Text style={styles.loginText}>
-          Already have an account?
+          Already have an account?</Text>
           <TouchableOpacity onPress={goToLogin}>
             <Text style={styles.loginButtonText}> Login</Text>
           </TouchableOpacity>
-        </Text>
+       
       </View>
     </View>
   );
