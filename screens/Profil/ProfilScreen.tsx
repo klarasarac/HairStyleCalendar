@@ -1,53 +1,57 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
   TouchableOpacity,
+  ScrollView,
   Image,
 } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 
-const ProfilScreen: React.FC = () => {
+ export const ProfilScreen: React.FC = () => {
   const nav = useNavigation<NativeStackNavigationProp<any>>();
   const goToWomenHairstyles = async () => {
-    nav.navigate("WomenScreen");
+    nav.navigate("WomenScreen",{hairStyle:"Women"});
   };
   const goToMenHairstyles = async () => {
-    nav.navigate("MenScreen");
+    nav.navigate("MenScreen", {hairStyle:"Men"});
+  };
+
+  const goToMyBookings = async () => {
+    nav.navigate("MyBookings");
   };
   return (
     <View style={styles.container}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollViewContainer}
-      >
-        <TouchableOpacity style={styles.card} onPress={goToWomenHairstyles}>
-          <Image
-            source={require("../../assets/women_hairstyles.png")}
-            style={styles.image}
-          />
-          <Text style={styles.cardTitle}>Women hairstyles</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.card} onPress={goToMenHairstyles}>
-          <Image
-            source={require("../../assets/men_hairstyles.png")}
-            style={styles.image}
-          />
-          <Text style={styles.cardTitle}>Men hairstyles</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.card}>
-          <Image
-            source={require("../../assets/my_bookings.png")}
-            style={styles.image}
-          />
-          <Text style={styles.cardTitle}>My bookings</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </View>
-  );
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.scrollViewContainer}
+    >
+      <TouchableOpacity style={styles.card} onPress={goToWomenHairstyles}>
+        <Image
+          source={require("../../assets/women_hairstyles.png")}
+          style={styles.image}
+        />
+        <Text style={styles.cardTitle}>Women hairstyles</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.card} onPress={goToMenHairstyles}>
+        <Image
+          source={require("../../assets/men_hairstyles.png")}
+          style={styles.image}
+        />
+        <Text style={styles.cardTitle}>Men hairstyles</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.card} onPress={goToMyBookings}>
+        <Image
+          source={require("../../assets/my_bookings.png")}
+          style={styles.image}
+        />
+        <Text style={styles.cardTitle}>My bookings</Text>
+      </TouchableOpacity>
+    </ScrollView>
+  </View>
+);
 };
 
 const styles = StyleSheet.create({

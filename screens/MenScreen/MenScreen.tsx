@@ -9,9 +9,15 @@ import {
   Alert,
 } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
-import { format, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
+import { format, addDays, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
 import { collection, addDoc } from 'firebase/firestore';
-import { db, auth } from '../../firebase';  
+import { auth, db } from '../../firebase';
+import { RouteProp } from "@react-navigation/native";
+import { RootStackParamList } from "../../App";
+import { useRoute } from '@react-navigation/native';
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useNavigation } from '@react-navigation/native';
+import Toast from "react-native-toast-message";
 
 const times = ["9:00", "10:00", "11:00", "12:00","13:00", "14:00", "15:00", "16:00","17:00"];
 const { width } = Dimensions.get("window");
@@ -21,6 +27,7 @@ const getDaysInMonth = () => {
   const end = endOfMonth(new Date());
   return eachDayOfInterval({ start, end }).map(date => format(date, 'EEE dd'));
 };
+type MenScreenRouteProp = RouteProp<RootStackParamList, 'MenScreen'>;
 
 export const MenScreen: React.FC = () => {
   const [selectedService, setSelectedService] = useState<string | null>(null);
@@ -28,6 +35,13 @@ export const MenScreen: React.FC = () => {
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [daysOfMonth, setDaysOfMonth] = useState<string[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
+  const route = useRoute<MenScreenRouteProp>();
+
+  const nav = useNavigation<NativeStackNavigationProp<any>>();
+  const goToHome = async () => {
+    nav.navigate("Profil");
+  };
+  
 
   useEffect(() => {
     setDaysOfMonth(getDaysInMonth());
@@ -47,29 +61,47 @@ export const MenScreen: React.FC = () => {
 
   const handleConfirm = async () => {
     if (!selectedService || !selectedDay || !selectedTime) {
-      Alert.alert("Incomplete Selection", "Please select service, day and time before confirming.");
+      Toast.show({
+        type: 'error',
+        text1: 'Incomplete Selection',
+        text2: 'Please select service, day and time before confirming.'
+      });
       return;
     }
 
     if (!userId) {
-      Alert.alert("User not logged in", "Please log in to make a booking.");
+      Toast.show({
+        type: 'error',
+        text1: 'User not logged in',
+        text2: 'Please log in to make a booking.'
+      });
       return;
     }
-
+    const hairStyle = route.params.hairStyle;
     try {
       const bookingRef = collection(db, "bookings");
       const docRef = await addDoc(bookingRef, {
+        hairStyle: hairStyle,
         service: selectedService,
         day: selectedDay,
         time: selectedTime,
-        userId: userId,  // Include the user ID in the booking
+        userId: userId,
         createdAt: new Date(),
       });
       console.log("Document written with ID: ", docRef.id);
-      Alert.alert("Booking Confirmed", `Your booking ID is ${docRef.id}`);
+      Toast.show({
+        type: 'success',
+        text1: 'Booking Confirmed',
+        text2: `Your booking ID is ${docRef.id}`
+      });
+      goToHome();
     } catch (e) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Something went wrong while booking. Please try again.'
+      });
       console.error("Error adding document: ", e);
-      Alert.alert("Error", "Something went wrong while booking. Please try again.");
     }
   };
 
@@ -80,6 +112,7 @@ export const MenScreen: React.FC = () => {
   const handleTimeSelection = (time: string) => {
     setSelectedTime(time);
   };
+  
 
   return (
     <View style={styles.container}>

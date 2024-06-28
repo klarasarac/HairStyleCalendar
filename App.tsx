@@ -8,13 +8,21 @@ import { LoginScreen } from "./screens/Login/LoginScreen";
 import  ProfilScreen from "./screens/Profil/ProfilScreen";
 import { WomenScreen } from "./screens/WomenScreen/WomenScreen";
 import { MenScreen} from "./screens/MenScreen/MenScreen";
+import { MyBookingsScreen } from "./screens/MyBookings/MyBookingsScreen";
+import  Toast  from 'react-native-toast-message';
+import { RootSiblingParent } from 'react-native-root-siblings';
 
-
+export type RootStackParamList = {
+  WomenScreen: { hairStyle: "Women" };
+  MenScreen: { hairStyle: "Men" };
+};
 
 const Stack = createNativeStackNavigator();
 
+
 export default function App() {
   return (
+    <RootSiblingParent>
     <NavigationContainer>
     
       <StatusBar style="light" />
@@ -88,10 +96,24 @@ export default function App() {
             },
           }}
         />
+        <Stack.Screen
+        name="MyBookings"
+        component={MyBookingsScreen}
+        options={{
+          title: "My Bookings",
+          headerShown: true,
+          headerTintColor: "#ff5e3a",
+          headerTitleStyle: { color: "white" },
+          headerStyle: {
+            backgroundColor: "rgb(28 35 48)",
+          },
+        }}
+        />
+     
       </Stack.Navigator>
-      
-        
+      <Toast/>
     </NavigationContainer>
+    </RootSiblingParent>
   );
 }
 

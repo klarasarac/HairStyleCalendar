@@ -18,6 +18,7 @@ import {
   signInWithEmailAndPassword,
   UserCredential,
 } from "firebase/auth";
+import Toast from "react-native-toast-message";
 
 export const LoginScreen: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -46,9 +47,19 @@ export const LoginScreen: React.FC = () => {
         Keyboard.dismiss();
       } else {
         console.error("Email and password are required");
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Email and password are required'
+        });
       }
-    } catch (error) {
+    } catch (error:any) {
       console.error(error);
+      Toast.show({
+        type: 'error',
+        text1: 'Login Failed',
+        text2:error.Message || 'Email or password is incorrect'
+      });
     }
   };
 

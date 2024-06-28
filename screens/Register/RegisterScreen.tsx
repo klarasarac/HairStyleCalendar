@@ -12,6 +12,7 @@ import {
   Alert,
 } from "react-native";
 import { auth, db } from "../../firebase";
+import Toast from "react-native-toast-message";
 
 export const RegisterScreen: React.FC = () => {
   const [Ime, setFirstName] = useState("");
@@ -56,7 +57,12 @@ export const RegisterScreen: React.FC = () => {
       !Spol ||
       !Datum_rodjenja
     ) {
-      Alert.alert("Error", "Please fill in all fields");
+      // Alert.alert("Error", "Please fill in all fields");
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Please fill in all fields",
+      });
       return;
     }
     try {
@@ -73,9 +79,19 @@ export const RegisterScreen: React.FC = () => {
       setPassword("");
       setBirthDate("");
       setGender("");
+      Toast.show({
+        type: "success",
+        text1: "Success",
+        text2: "You have successfully registered",
+      })
       goToLogin();
-    } catch (error) {
+    } catch (error:any) {
       console.log(error);
+      Toast.show({
+        type: "error",
+        text1: "Registration Failed",
+        text2:error.Message ||"Something went wrong",
+      })
     }
   };
 
