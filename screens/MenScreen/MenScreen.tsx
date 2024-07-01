@@ -9,7 +9,7 @@ import {
   Alert,
 } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
-import { format, addDays, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
+import { format,addYears,startOfYear ,addDays, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
 import { collection, addDoc, query, where, getDoc, getDocs } from 'firebase/firestore';
 import { auth, db } from '../../firebase';
 import { RouteProp } from "@react-navigation/native";
@@ -18,6 +18,13 @@ import { useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from '@react-navigation/native';
 import Toast from "react-native-toast-message";
+import { enUS } from 'date-fns/locale';
+
+
+interface MonthOption {
+  label: string;
+  value: number;
+}
 //provjera dostupnosti termina za mena
 interface Booking {
   hairStyle: string;
@@ -30,6 +37,11 @@ interface Booking {
 
 type AvailabilityCheck = (day: string, time: string) => Promise<boolean>;
 
+const getDaysInYear = () => {
+  const start = startOfYear(new Date());
+  const end = addYears(start, 1); // Get the first day of the next year
+  return eachDayOfInterval({ start, end: new Date(end.getTime() - 1) }).map(date => format(date, 'EEE dd MMM'));
+};
 
 const times = ["9:00", "10:00", "11:00", "12:00","13:00", "14:00", "15:00", "16:00","17:00"];
 const { width } = Dimensions.get("window");
@@ -48,11 +60,31 @@ export const MenScreen: React.FC = () => {
   const [daysOfMonth, setDaysOfMonth] = useState<string[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
   const route = useRoute<MenScreenRouteProp>();
+  const [daysInSelectedMonth, setDaysInSelectedMonth] = useState<string[]>([]);
+ const [daysOfYear, setDaysOfYear] = useState<string[]>([]);
+ const [selectedMonth, setSelectedMonth] = useState<number>(new Date().getMonth());
 
   const nav = useNavigation<NativeStackNavigationProp<any>>();
   const goToHome = async () => {
     nav.navigate("Profil");
   };
+  const months: MonthOption[] = Array.from({ length: 12 }, (_, index) => ({
+    label: new Date(0, index).toLocaleString('en-US', { month: 'long' }),
+    value: index
+  }));
+  const getMonthName = (monthIndex: number | null): string => {
+    if (monthIndex === null) return "None";
+    return months[monthIndex].label;
+  };
+  const updateDaysInMonth = (month: number, year: number = new Date().getFullYear()) => {
+    const start = startOfMonth(new Date(year,month));
+    const end = endOfMonth(new Date(year,month));
+    const days = eachDayOfInterval({ start, end }).map(date => format(date, 'EEE dd', { locale:enUS }));
+    setDaysInSelectedMonth(days);
+  };
+  useEffect(() => {
+    updateDaysInMonth(new Date().getMonth());
+  }, []);
   
 
   useEffect(() => {
@@ -150,6 +182,15 @@ export const MenScreen: React.FC = () => {
       />
 
       <Text style={styles.subtitle}>Select Date & Time</Text>
+      <RNPickerSelect
+        onValueChange={(value) => {
+          setSelectedMonth(value);
+          updateDaysInMonth(value);
+        }}
+        items={months}
+        placeholder={{ label: "Select a month...", value: null }}
+        style={pickerSelectStyles}
+      />
 
       <ScrollView horizontal contentContainerStyle={styles.dateContainer}>
         {daysOfMonth.map((day) => (
@@ -197,6 +238,7 @@ export const MenScreen: React.FC = () => {
 
       <View style={styles.selectionSummary}>
         <Text>Selected Service: {selectedService || "None"}</Text>
+        <Text>Selected Month: {getMonthName(selectedMonth)}</Text>
         <Text>Selected Day: {selectedDay || "None"}</Text>
         <Text>Selected Time: {selectedTime || "None"}</Text>
       </View>
