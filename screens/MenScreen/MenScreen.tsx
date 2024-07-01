@@ -9,29 +9,17 @@ import {
   Alert,
 } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
-import { format, addDays, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
-import { collection, addDoc, query, where, getDoc, getDocs } from 'firebase/firestore';
+import { format, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
+import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import { auth, db } from '../../firebase';
-import { RouteProp } from "@react-navigation/native";
+import { RouteProp, useRoute } from "@react-navigation/native";
+import Toast from 'react-native-toast-message';
 import { RootStackParamList } from "../../App";
-import { useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useNavigation } from '@react-navigation/native';
-import Toast from "react-native-toast-message";
-//provjera dostupnosti termina za mena
-interface Booking {
-  hairStyle: string;
-  service: string;
-  day: string;
-  time: string;
-  userId: string;
-  createdAt: Date;
-}
-
-type AvailabilityCheck = (day: string, time: string) => Promise<boolean>;
+import {useNavigation} from '@react-navigation/native';
 
 
-const times = ["9:00", "10:00", "11:00", "12:00","13:00", "14:00", "15:00", "16:00","17:00"];
+const times = ["9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"];
 const { width } = Dimensions.get("window");
 
 const getDaysInMonth = () => {
@@ -39,6 +27,7 @@ const getDaysInMonth = () => {
   const end = endOfMonth(new Date());
   return eachDayOfInterval({ start, end }).map(date => format(date, 'EEE dd'));
 };
+
 type MenScreenRouteProp = RouteProp<RootStackParamList, 'MenScreen'>;
 
 export const MenScreen: React.FC = () => {
@@ -47,13 +36,13 @@ export const MenScreen: React.FC = () => {
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [daysOfMonth, setDaysOfMonth] = useState<string[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
+  const [disabledTimes, setDisabledTimes] = useState<string[]>([]); // State for disabled times
   const route = useRoute<MenScreenRouteProp>();
 
   const nav = useNavigation<NativeStackNavigationProp<any>>();
   const goToHome = async () => {
     nav.navigate("Profil");
   };
-  
 
   useEffect(() => {
     setDaysOfMonth(getDaysInMonth());
@@ -70,21 +59,38 @@ export const MenScreen: React.FC = () => {
 
     return unsubscribe;
   }, []);
-//provjera dostupnosti termina
-  const checkAvailability: AvailabilityCheck = async (day, time) => {
-    const bookingRef = collection(db, "bookings");
-    const q = query(bookingRef, where("day", "==", day), where("time", "==", time));
-    
+
+  const fetchDisabledTimes = async (day: string) => {
+    if (!day) return;
+
+    const bookingsRef = collection(db, 'bookings');
+    const q = query(bookingsRef, where('day', '==', day));
     const querySnapshot = await getDocs(q);
-    return querySnapshot.empty; // Vraća true ako nema rezervacija, false inače
+    const disabledTimesArray = querySnapshot.docs.map(doc => doc.data().time);
+
+    setDisabledTimes(disabledTimesArray);
   };
 
   const handleConfirm = async () => {
-    if (!selectedService || !selectedDay || !selectedTime) {
+    if (!["hair_cut_shave", "hair_cut", "shave"].includes(selectedService || "")) {
       Toast.show({
         type: 'error',
         text1: 'Incomplete Selection',
         text2: 'Please select service, day and time before confirming.'
+      });
+      return;
+    }
+
+    const querySnapshot = await getDocs(query(collection(db, 'bookings'),
+      where('day', '==', selectedDay),
+      where('time', '==', selectedTime)
+    ));
+
+    if (!querySnapshot.empty) {
+      Toast.show({
+        type: 'error',
+        text1: 'Time Slot Already Booked',
+        text2: 'Please select a different time slot.'
       });
       return;
     }
@@ -97,7 +103,9 @@ export const MenScreen: React.FC = () => {
       });
       return;
     }
+
     const hairStyle = route.params.hairStyle;
+
     try {
       const bookingRef = collection(db, "bookings");
       const docRef = await addDoc(bookingRef, {
@@ -107,7 +115,7 @@ export const MenScreen: React.FC = () => {
         time: selectedTime,
         userId: userId,
         createdAt: new Date(),
-      } as Booking);  // dodano zbog provjeravanja dostupnosti
+      });
       console.log("Document written with ID: ", docRef.id);
       Toast.show({
         type: 'success',
@@ -116,23 +124,52 @@ export const MenScreen: React.FC = () => {
       });
       goToHome();
     } catch (e) {
+      console.error("Error adding document: ", e);
       Toast.show({
         type: 'error',
         text1: 'Error',
         text2: 'Something went wrong while booking. Please try again.'
       });
-      console.error("Error adding document: ", e);
     }
   };
 
   const handleDaySelection = (day: string) => {
     setSelectedDay(day);
+    fetchDisabledTimes(day); // Fetch disabled times for newly selected day
   };
 
   const handleTimeSelection = (time: string) => {
     setSelectedTime(time);
   };
-  
+
+  const renderTimeButtons = () => {
+    return times.map((time) => {
+      const isDisabled = disabledTimes.includes(time);
+
+      return (
+        <TouchableOpacity
+          key={time}
+          style={[
+            styles.timeButton,
+            isDisabled && styles.disabledTimeButton,
+            selectedTime === time && styles.selectedTimeButton,
+          ]}
+          onPress={() => handleTimeSelection(time)}
+          disabled={isDisabled} // Disable onPress if time is already booked
+        >
+          <Text
+            style={[
+              styles.timeButtonText,
+              isDisabled && styles.disabledTimeButtonText,
+              selectedTime === time && styles.selectedTimeButtonText,
+            ]}
+          >
+            {time}
+          </Text>
+        </TouchableOpacity>
+      );
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -174,25 +211,7 @@ export const MenScreen: React.FC = () => {
       </ScrollView>
 
       <ScrollView horizontal contentContainerStyle={styles.timeContainer}>
-        {times.map((time) => (
-          <TouchableOpacity
-            key={time}
-            style={[
-              styles.timeButton,
-              selectedTime === time && styles.selectedTimeButton,
-            ]}
-            onPress={() => handleTimeSelection(time)}
-          >
-            <Text
-              style={[
-                styles.timeButtonText,
-                selectedTime === time && styles.selectedTimeButtonText,
-              ]}
-            >
-              {time}
-            </Text>
-          </TouchableOpacity>
-        ))}
+        {renderTimeButtons()}
       </ScrollView>
 
       <View style={styles.selectionSummary}>
@@ -262,9 +281,15 @@ const styles = StyleSheet.create({
     minWidth: width / 5 - 10,
     alignItems: 'center',
   },
+  disabledTimeButton: {
+    backgroundColor: "#d3d3d3", // Different background color for disabled times
+  },
   timeButtonText: {
     fontSize: 14,
     color: "#f2f2f0",
+  },
+  disabledTimeButtonText: {
+    color: "#a0a0a0", // Different text color for disabled times
   },
   selectedTimeButton: {
     backgroundColor: "#ff5e3a",
