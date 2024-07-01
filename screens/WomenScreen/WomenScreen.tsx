@@ -9,7 +9,7 @@ import {
   Alert,
 } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
-import { format, addYears,startOfYear, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
+import { format, addDays, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
 import { collection,doc,setDoc,addDoc, query, where, getDoc, getDocs } from 'firebase/firestore';
 import { db, auth } from '../../firebase';
 import firestore from '@react-native-firebase/firestore';
@@ -19,11 +19,6 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 //import auth from '@react-native-firebase/auth';
 import Toast from "react-native-toast-message";
-
-interface MonthOption {
-  label: string;
-  value: number;
-}
 
 //za provjeru dostupnosti rezervacije
 interface Booking {
@@ -37,12 +32,6 @@ interface Booking {
 
 type AvailabilityCheck = (day: string, time: string) => Promise<boolean>;
 
-//
-const getDaysInYear = () => {
-  const start = startOfYear(new Date());
-  const end = addYears(start, 1); // Get the first day of the next year
-  return eachDayOfInterval({ start, end: new Date(end.getTime() - 1) }).map(date => format(date, 'EEE dd MMM'));
-};
 //
 
 
@@ -64,35 +53,12 @@ export const WomenScreen: React.FC = () => {
   const [daysOfMonth, setDaysOfMonth] = useState<string[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
   const route = useRoute<WomenScreenRouteProp>();
-  const [daysOfYear, setDaysOfYear] = useState<string[]>([]);
-  const [selectedMonth, setSelectedMonth] = useState<number>(new Date().getMonth());
-  const [daysInSelectedMonth, setDaysInSelectedMonth] = useState<string[]>([]);
-  
+
   const nav = useNavigation<NativeStackNavigationProp<any>>();
 const goToHome = async () => {
   nav.navigate("Profil");
 };
 
-// 
-const months: MonthOption[] = Array.from({ length: 12 }, (_, index) => ({
-  label: new Date(0, index).toLocaleString('en-US', { month: 'long' }),
-  value: index
-}));
-const getMonthName = (monthIndex: number | null): string => {
-  if (monthIndex === null) return "None";
-  return months[monthIndex].label;
-};
-
-const updateDaysInMonth = (month: number) => {
-  const start = startOfMonth(new Date(new Date().getFullYear(), month));
-  const end = endOfMonth(start);
-  const days = eachDayOfInterval({ start, end }).map(date => format(date, 'EEE dd MMM'));
-  setDaysInSelectedMonth(days);
-};
-useEffect(() => {
-  updateDaysInMonth(new Date().getMonth());
-}, []);
-//
   useEffect(() => {
     setDaysOfMonth(getDaysInMonth());
   }, []);
@@ -188,12 +154,6 @@ if (!isAvailable) {
   const handleTimeSelection = (time: string) => {
     setSelectedTime(time);
   };
-
-  //
-  useEffect(() => {
-    setDaysOfYear(getDaysInYear()); // Set the days of the year when the component mounts
-  }, []);
-  //
   
 
   return (
@@ -212,25 +172,16 @@ if (!isAvailable) {
       />
 
       <Text style={styles.subtitle}>Select Date & Time</Text>
-      <RNPickerSelect
-        onValueChange={(value) => {
-          setSelectedMonth(value);
-          updateDaysInMonth(value);
-        }}
-        items={months}
-        placeholder={{ label: "Select a month...", value: null }}
-        style={pickerSelectStyles}
-      />
 
       <ScrollView horizontal contentContainerStyle={styles.dateContainer}>
-        {daysOfYear.map((day) => (
+        {daysOfMonth.map((day) => (
           <TouchableOpacity
             key={day}
             style={[
               styles.dayButton,
               selectedDay === day && styles.selectedDayButton,
             ]}
-            onPress={() => setSelectedDay(day)}
+            onPress={() => handleDaySelection(day)}
           >
             <Text
               style={[
@@ -268,7 +219,6 @@ if (!isAvailable) {
 
       <View style={styles.selectionSummary}>
         <Text>Selected Service: {selectedService || "None"}</Text>
-        <Text>Selected Month: {getMonthName(selectedMonth)}</Text>
         <Text>Selected Day: {selectedDay || "None"}</Text>
         <Text>Selected Time: {selectedTime || "None"}</Text>
       </View>
