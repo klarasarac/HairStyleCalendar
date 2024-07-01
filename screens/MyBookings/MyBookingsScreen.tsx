@@ -12,6 +12,7 @@ import { collection, query, where, getDocs, deleteDoc, doc } from 'firebase/fire
 import { db, auth } from '../../firebase';
 import Toast from "react-native-toast-message";
 
+
 const { width } = Dimensions.get("window");
 
 export const MyBookingsScreen: React.FC = () => {
@@ -50,6 +51,7 @@ export const MyBookingsScreen: React.FC = () => {
       });
     }
   };
+ 
 
   const handleCancelBooking = async (bookingId: string) => {
     try {

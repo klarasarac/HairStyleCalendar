@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import { format, addDays, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, query, where, getDoc, getDocs } from 'firebase/firestore';
 import { auth, db } from '../../firebase';
 import { RouteProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../App";
@@ -18,6 +18,18 @@ import { useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from '@react-navigation/native';
 import Toast from "react-native-toast-message";
+//provjera dostupnosti termina za mena
+interface Booking {
+  hairStyle: string;
+  service: string;
+  day: string;
+  time: string;
+  userId: string;
+  createdAt: Date;
+}
+
+type AvailabilityCheck = (day: string, time: string) => Promise<boolean>;
+
 
 const times = ["9:00", "10:00", "11:00", "12:00","13:00", "14:00", "15:00", "16:00","17:00"];
 const { width } = Dimensions.get("window");
@@ -58,6 +70,14 @@ export const MenScreen: React.FC = () => {
 
     return unsubscribe;
   }, []);
+//provjera dostupnosti termina
+  const checkAvailability: AvailabilityCheck = async (day, time) => {
+    const bookingRef = collection(db, "bookings");
+    const q = query(bookingRef, where("day", "==", day), where("time", "==", time));
+    
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.empty; // Vraća true ako nema rezervacija, false inače
+  };
 
   const handleConfirm = async () => {
     if (!selectedService || !selectedDay || !selectedTime) {
@@ -87,7 +107,7 @@ export const MenScreen: React.FC = () => {
         time: selectedTime,
         userId: userId,
         createdAt: new Date(),
-      });
+      } as Booking);  // dodano zbog provjeravanja dostupnosti
       console.log("Document written with ID: ", docRef.id);
       Toast.show({
         type: 'success',

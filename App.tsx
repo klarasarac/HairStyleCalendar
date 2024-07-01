@@ -12,6 +12,7 @@ import { MyBookingsScreen } from "./screens/MyBookings/MyBookingsScreen";
 import  Toast  from 'react-native-toast-message';
 import { RootSiblingParent } from 'react-native-root-siblings';
 
+
 export type RootStackParamList = {
   WomenScreen: { hairStyle: "Women" };
   MenScreen: { hairStyle: "Men" };

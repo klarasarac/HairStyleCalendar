@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import { format, addDays, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
-import { collection,doc,setDoc,addDoc } from 'firebase/firestore';
+import { collection,doc,setDoc,addDoc, query, where, getDoc, getDocs } from 'firebase/firestore';
 import { db, auth } from '../../firebase';
 import firestore from '@react-native-firebase/firestore';
 import { RouteProp, useRoute } from "@react-navigation/native";
@@ -20,6 +20,19 @@ import { useNavigation } from "@react-navigation/native";
 //import auth from '@react-native-firebase/auth';
 import Toast from "react-native-toast-message";
 
+//za provjeru dostupnosti rezervacije
+interface Booking {
+  hairStyle: string;
+  service: string;
+  day: string;
+  time: string;
+  userId: string;
+  createdAt: Date;
+}
+
+type AvailabilityCheck = (day: string, time: string) => Promise<boolean>;
+
+//
 
 
 const times = ["9:00", "10:00", "11:00", "12:00","13:00", "14:00", "15:00", "16:00","17:00"];
@@ -62,6 +75,18 @@ const goToHome = async () => {
     return unsubscribe;
   }, []);
 
+  //provjera dostupnosti rezervacije
+  const checkAvailability: AvailabilityCheck = async (day, time) => {
+    const bookingRef = collection(db, "bookings");
+    const q = query(bookingRef, where("day", "==", day), where("time", "==", time));
+    
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.empty; // Vraća true ako nema rezervacija, false inače
+  };
+  //
+  
+  
+
   const handleConfirm = async () => {
     if (!selectedService || !selectedDay || !selectedTime) {
       Toast.show({
@@ -80,6 +105,17 @@ const goToHome = async () => {
       });
       return;
     }
+//
+const isAvailable = await checkAvailability(selectedDay, selectedTime);
+if (!isAvailable) {
+  Toast.show({
+    type: 'error',
+    text1: 'Booking Error',
+    text2: 'This time slot is already booked. Please choose another time.'
+  });
+  return;
+}
+//
 
     const hairStyle = route.params.hairStyle;
 
@@ -93,7 +129,7 @@ const goToHome = async () => {
         userId: userId,
         createdAt: new Date(),
         
-      });
+      } as Booking);   //dodano zbog provjere dostupnosti rezervacije
       console.log("Document written with ID: ", docRef.id);
       Toast.show({
         type: 'success',
