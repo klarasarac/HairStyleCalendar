@@ -17,6 +17,8 @@ import { useHandleConfirm } from "../../utils/useHandleConfirm";
 import { ServiceTypes, getServiceOptions } from "../../utils/serviceTypes";
 import { useDateAndTime, useUserData } from "../../hooks/hooks";
 import { getDisabledSlots } from "../../utils/getDisableSlots";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 
 //const times = ["9:00", "10:00", "11:00", "12:00","13:00", "14:00", "15:00", "16:00","17:00"];
@@ -30,6 +32,9 @@ const { width } = Dimensions.get("window");
 type MenScreenRouteProp = RouteProp<RootStackParamList, 'MenScreen'>;
 
 export const MenScreen: React.FC = () => {
+
+
+
 
   const route = useRoute<MenScreenRouteProp>();
   const userId = useUserData();
@@ -46,6 +51,7 @@ export const MenScreen: React.FC = () => {
   const handleTimeSelection = (time: string) => {
     setSelectedTime(time);
   };
+  
 
   const handleConfirm = useHandleConfirm(
     selectedService,
@@ -53,7 +59,8 @@ export const MenScreen: React.FC = () => {
     selectedTime,
     userId,
     route.params.hairStyle,
-    db
+    db,
+  
   );
 
   useEffect(() => {
@@ -65,6 +72,7 @@ export const MenScreen: React.FC = () => {
     fetchDisabledSlots();
   }, [daysOfMonth, times]);
 
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Booking</Text>
@@ -87,6 +95,7 @@ export const MenScreen: React.FC = () => {
               selectedDay === day && styles.selectedDayButton,
             ]}
             onPress={() => handleDaySelection(day)}
+            
           >
             <Text
               style={[

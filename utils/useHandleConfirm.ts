@@ -3,6 +3,8 @@ import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 import { validateSelection } from "./validations";
 import { ServiceTypes } from "./serviceTypes";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp, NativeStackNavigatorProps } from "@react-navigation/native-stack/lib/typescript/src/types";
 
 export const useHandleConfirm = (
   selectedService: string | null,
@@ -12,6 +14,7 @@ export const useHandleConfirm = (
   hairStyle: string | null,
   db: any
 ) => {
+    const navigation = useNavigation<NativeStackNavigationProp<any>>();
   return useCallback(async () => {
     if (
       !["hair_cut_color", "hair_cut", "hair_color"].includes(
@@ -50,8 +53,8 @@ export const useHandleConfirm = (
         text2: "Please log in to make a booking.",
       });
       return;
-    }
-
+    } 
+    
     try {
       const bookingRef = collection(db, "bookings");
       const docRef = await addDoc(bookingRef, {
@@ -68,6 +71,7 @@ export const useHandleConfirm = (
         text1: "Booking Confirmed",
         text2: `Your booking ID is ${docRef.id}`,
       });
+      navigation.navigate("Profil");
     } catch (e) {
       console.error("Error adding document: ", e);
       Toast.show({

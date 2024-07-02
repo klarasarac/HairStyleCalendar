@@ -1,46 +1,3 @@
-// import React from 'react';
-// import { View, Text, StyleSheet, Button } from 'react-native';
-// import { useNavigation } from '@react-navigation/native';
-// import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
-// const AdminScreen: React.FC = () => {
-//   const nav = useNavigation<NativeStackNavigationProp<any>>();
-
-//   const goToProfile = () => {
-//     nav.navigate("Profil");
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.title}>Admin Dashboard</Text>
-//       <Text style={styles.welcomeMessage}>Welcome, Admin!</Text>
-//       <Button title="Go to Profile" onPress={goToProfile} />
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     backgroundColor: '#f2f2f0',
-//     padding: 20,
-//   },
-//   title: {
-//     fontSize: 24,
-//     fontWeight: 'bold',
-//     color: '#2c365d',
-//     marginBottom: 20,
-//   },
-//   welcomeMessage: {
-//     fontSize: 18,
-//     color: '#2c365d',
-//     marginBottom: 20,
-//   },
-// });
-
-// export default AdminScreen;
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -171,17 +128,6 @@ export const AdminScreen: React.FC = () => {
           ))
         )}
       </ScrollView>
-
-      <Text style={styles.subtitle}>Add New Admin</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter user email"
-        value={newAdminEmail}
-        onChangeText={setNewAdminEmail}
-      />
-      <TouchableOpacity style={styles.addButton} onPress={handleAddAdmin}>
-        <Text style={styles.addButtonText}>Add Admin</Text>
-      </TouchableOpacity>
     </View>
   );
 };
