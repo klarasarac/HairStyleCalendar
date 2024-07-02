@@ -42,34 +42,8 @@ export const LoginScreen: React.FC = () => {
     nav.navigate("Profil");
   };
 
-  // const handleLogin = async () => {
-  //   try {
-  //     if (email && password) {
-  //       const userCredential = await signInWithEmailAndPassword(
-  //         auth,
-  //         email,
-  //         password
-  //       );
-  //       // Handle successful login
-  //       goToHome();
-  //       Keyboard.dismiss();
-  //     } else {
-  //       console.error("Email and password are required");
-  //       Toast.show({
-  //         type: 'error',
-  //         text1: 'Error',
-  //         text2: 'Email and password are required'
-  //       });
-  //     }
-  //   } catch (error:any) {
-  //     console.error(error);
-  //     Toast.show({
-  //       type: 'error',
-  //       text1: 'Login Failed',
-  //       text2:error.Message || 'Email or password is incorrect'
-  //     });
-  //   }
-  // };
+
+  
   const getUserRole = async (uid: string) => {
     const userDoc = await getDoc(doc(db, "users", uid));
     return userDoc.exists() ? userDoc.data().role : "user";
