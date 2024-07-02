@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useState } from "react";
-import { auth } from "../../firebase";
+import { auth, db } from "../../firebase";
 import {
   SafeAreaView,
   View,
@@ -17,14 +17,22 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   UserCredential,
+  getIdTokenResult
 } from "firebase/auth";
 import Toast from "react-native-toast-message";
+import { doc, getDoc } from "firebase/firestore";
+
 
 export const LoginScreen: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const nav = useNavigation<NativeStackNavigationProp<any>>();
+
+  const goToAdminScreen = () => {
+    nav.navigate("AdminScreen");
+  };
+  
 
   const goToRegistration = () => {
     nav.push("Register");
@@ -34,35 +42,67 @@ export const LoginScreen: React.FC = () => {
     nav.navigate("Profil");
   };
 
+  // const handleLogin = async () => {
+  //   try {
+  //     if (email && password) {
+  //       const userCredential = await signInWithEmailAndPassword(
+  //         auth,
+  //         email,
+  //         password
+  //       );
+  //       // Handle successful login
+  //       goToHome();
+  //       Keyboard.dismiss();
+  //     } else {
+  //       console.error("Email and password are required");
+  //       Toast.show({
+  //         type: 'error',
+  //         text1: 'Error',
+  //         text2: 'Email and password are required'
+  //       });
+  //     }
+  //   } catch (error:any) {
+  //     console.error(error);
+  //     Toast.show({
+  //       type: 'error',
+  //       text1: 'Login Failed',
+  //       text2:error.Message || 'Email or password is incorrect'
+  //     });
+  //   }
+  // };
+  const getUserRole = async (uid: string) => {
+    const userDoc = await getDoc(doc(db, "users", uid));
+    return userDoc.exists() ? userDoc.data().role : "user";
+  };
   const handleLogin = async () => {
+    if (!email || !password) {
+      Toast.show({
+        type: 'error',
+        text1: 'Validation Error',
+        text2: 'Email and password are required.'
+      });
+      return;
+    }
+
     try {
-      if (email && password) {
-        const userCredential = await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-        // Handle successful login
-        goToHome();
-        Keyboard.dismiss();
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      const role = await getUserRole(user.uid);
+
+      if (role === "admin") {
+        goToAdminScreen();
       } else {
-        console.error("Email and password are required");
-        Toast.show({
-          type: 'error',
-          text1: 'Error',
-          text2: 'Email and password are required'
-        });
+        goToHome();
       }
-    } catch (error:any) {
+    } catch (error: any) {
       console.error(error);
       Toast.show({
         type: 'error',
         text1: 'Login Failed',
-        text2:error.Message || 'Email or password is incorrect'
+        text2: error.message
       });
     }
   };
-
   return (
     <Pressable style={styles.contentView}>
       <SafeAreaView style={styles.contentView}>

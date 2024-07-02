@@ -1,8 +1,8 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { collection, doc, setDoc, getDocs, query, limit } from "firebase/firestore";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { collection, doc, setDoc } from "firebase/firestore";
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { auth, db } from "../../firebase";
 import Toast from "react-native-toast-message";
+import Role from "../enums/user_role"
 
 export const RegisterScreen: React.FC = () => {
   const [Ime, setFirstName] = useState("");
@@ -27,7 +28,8 @@ export const RegisterScreen: React.FC = () => {
   const goToLogin = async () => {
     nav.navigate("Login");
   };
-  const createProfile = async (response: any) => {
+
+  const createProfile = async (response: any, role:Role) => {
     const usersCollection = collection(db, "users");
     const userDoc = doc(usersCollection, response.user.uid);
 
@@ -38,15 +40,12 @@ export const RegisterScreen: React.FC = () => {
       Telefon,
       Spol,
       Datum_rodjenja,
+      role,  // Dodavanje uloge korisnika
     });
 
-    console.log(
-      "User profile created successfully",
-      usersCollection,
-      userDoc,
-      response.user.uid
-    );
+    console.log("User profile created successfully with role:", role);
   };
+
   const registerAndGoToMainFlow = async () => {
     if (
       !Ime ||
@@ -57,7 +56,6 @@ export const RegisterScreen: React.FC = () => {
       !Spol ||
       !Datum_rodjenja
     ) {
-      // Alert.alert("Error", "Please fill in all fields");
       Toast.show({
         type: "error",
         text1: "Error",
@@ -71,7 +69,11 @@ export const RegisterScreen: React.FC = () => {
         Email,
         Lozinka
       );
-      createProfile(response);
+
+      // Provera da li je ovo prvi korisnik koji se registruje
+      const isFirstUser = (await getDocs(query(collection(db, "users"), limit(1)))).empty;
+
+      createProfile(response, isFirstUser ? Role.Admin : Role.User);
       setFirstName("");
       setLastName("");
       setPhoneNumber("");
@@ -83,15 +85,15 @@ export const RegisterScreen: React.FC = () => {
         type: "success",
         text1: "Success",
         text2: "You have successfully registered",
-      })
+      });
       goToLogin();
-    } catch (error:any) {
+    } catch (error: any) {
       console.log(error);
       Toast.show({
         type: "error",
         text1: "Registration Failed",
-        text2:error.Message ||"Something went wrong",
-      })
+        text2: error.message || "Something went wrong",
+      });
     }
   };
 

@@ -11,6 +11,7 @@ import { MenScreen} from "./screens/MenScreen/MenScreen";
 import { MyBookingsScreen } from "./screens/MyBookings/MyBookingsScreen";
 import  Toast  from 'react-native-toast-message';
 import { RootSiblingParent } from 'react-native-root-siblings';
+import AdminScreen from "./screens/AdminScreen/AdminScreen";
 
 
 export type RootStackParamList = {
@@ -97,6 +98,7 @@ export default function App() {
             },
           }}
         />
+      
         <Stack.Screen
         name="MyBookings"
         component={MyBookingsScreen}
@@ -109,6 +111,19 @@ export default function App() {
             backgroundColor: "rgb(28 35 48)",
           },
         }}
+        />
+        <Stack.Screen
+          name="AdminScreen"
+          component={AdminScreen}
+          options={{
+            title: "Admin Profile",
+            headerShown: true,
+            headerTintColor: "#ff5e3a",
+            headerTitleStyle: { color: "white" },
+            headerStyle: {
+              backgroundColor: "rgb(28 35 48)",
+            },
+          }}
         />
      
       </Stack.Navigator>
