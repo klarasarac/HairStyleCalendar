@@ -18,26 +18,20 @@ import { ServiceTypes, getServiceOptions } from "../../utils/serviceTypes";
 import { useDateAndTime, useUserData } from "../../hooks/hooks";
 import { getDisabledSlots } from "../../utils/getDisableSlots";
 
-
-//const times = ["9:00", "10:00", "11:00", "12:00","13:00", "14:00", "15:00", "16:00","17:00"];
 const { width } = Dimensions.get("window");
 
-// const getDaysInMonth = () => {
-//   const start = startOfMonth(new Date());
-//   const end = endOfMonth(new Date());
-//   return eachDayOfInterval({ start, end }).map(date => format(date, 'EEE dd'));
-// };
-type MenScreenRouteProp = RouteProp<RootStackParamList, 'MenScreen'>;
+type WomenScreenRouteProp = RouteProp<RootStackParamList, "WomenScreen">;
 
-export const MenScreen: React.FC = () => {
-
-  const route = useRoute<MenScreenRouteProp>();
+export const WomenScreenCopy: React.FC = () => {
+  const route = useRoute<WomenScreenRouteProp>();
   const userId = useUserData();
   const { daysOfMonth, times } = useDateAndTime();
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [selectedService, setSelectedService] = useState<string | null>(null);
-  const [disabledSlots, setDisabledSlots] = useState< { day: string; time: string }[]>([]);
+  const [disabledSlots, setDisabledSlots] = useState<
+    { day: string; time: string }[]
+  >([]);
 
   const handleDaySelection = (day: string) => {
     setSelectedDay(day);
@@ -64,7 +58,6 @@ export const MenScreen: React.FC = () => {
 
     fetchDisabledSlots();
   }, [daysOfMonth, times]);
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Booking</Text>
@@ -99,6 +92,7 @@ export const MenScreen: React.FC = () => {
           </TouchableOpacity>
         ))}
       </ScrollView>
+
       <ScrollView horizontal contentContainerStyle={styles.timeContainer}>
         {times.map((time) => {
           const isDisabled = disabledSlots.some(
@@ -123,11 +117,12 @@ export const MenScreen: React.FC = () => {
                 ]}
               >
                 {time}
-            </Text>
-          </TouchableOpacity>
+              </Text>
+            </TouchableOpacity>
           );
         })}
       </ScrollView>
+
       <View style={styles.selectionSummary}>
         <Text>
           Selected Service:
@@ -255,5 +250,3 @@ const pickerSelectStyles = StyleSheet.create({
     marginBottom: 20,
   },
 });
-
-export default MenScreen;

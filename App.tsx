@@ -6,7 +6,7 @@ import { HomePage } from "./screens/HomePage/HomePage";
 import { RegisterScreen } from "./screens/Register/RegisterScreen";
 import { LoginScreen } from "./screens/Login/LoginScreen";
 import  ProfilScreen from "./screens/Profil/ProfilScreen";
-import { WomenScreen } from "./screens/WomenScreen/WomenScreen";
+import { WomenScreenCopy } from "./screens/WomenScreen/WomenScreenCopy";
 import { MenScreen} from "./screens/MenScreen/MenScreen";
 import { MyBookingsScreen } from "./screens/MyBookings/MyBookingsScreen";
 import  Toast  from 'react-native-toast-message';
@@ -73,7 +73,7 @@ export default function App() {
         />
         <Stack.Screen
           name="WomenScreen"
-          component={WomenScreen}
+          component={WomenScreenCopy}
           options={{
             title: "Hairstyles",
             headerShown: true,
