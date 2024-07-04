@@ -1,8 +1,6 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
-import { validateSelection } from "./validations";
-import { ServiceTypes } from "./serviceTypes";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp, NativeStackNavigatorProps } from "@react-navigation/native-stack/lib/typescript/src/types";
 

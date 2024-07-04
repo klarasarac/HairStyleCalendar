@@ -1,13 +1,12 @@
 import {
-  Button,
   Image,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect } from "react";
-import { Link, useNavigation } from "@react-navigation/native";
+import React from "react";
+import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 export const HomePage: React.FC = () => {
   const nav = useNavigation<NativeStackNavigationProp<any>>();

@@ -1,7 +1,6 @@
-
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Button, View, ActivityIndicator } from "react-native";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { HomePage } from "./screens/HomePage/HomePage";
