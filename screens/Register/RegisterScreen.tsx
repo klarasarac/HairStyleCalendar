@@ -13,7 +13,9 @@ import {
 } from "react-native";
 import { auth, db } from "../../firebase";
 import Toast from "react-native-toast-message";
-import Role from "../enums/user_role"
+import Role from "../enums/user_role";
+import { TextInputMask } from "react-native-masked-text";
+import { Picker } from "@react-native-picker/picker";
 
 export const RegisterScreen: React.FC = () => {
   const [Ime, setFirstName] = useState("");
@@ -130,21 +132,27 @@ export const RegisterScreen: React.FC = () => {
         placeholderTextColor="#999"
         secureTextEntry={true}
       />
-      <TextInput
-        style={styles.input}
+        <TextInputMask
+        type={'datetime'}
+        options={{
+          format: 'DD.MM.YYYY'
+        }}
         value={Datum_rodjenja}
         onChangeText={setBirthDate}
+        style={styles.input}
         placeholder="Birth Date (DD.MM.YYYY)"
         placeholderTextColor="#999"
         keyboardType="numeric"
       />
-      <TextInput
+       <Picker
+        selectedValue={Spol}
         style={styles.input}
-        value={Spol}
-        onChangeText={setGender}
-        placeholder="Gender"
-        placeholderTextColor="#999"
-      />
+        onValueChange={(itemValue:string) => setGender(itemValue)}
+      >
+        <Picker.Item label="Select Gender" value="" />
+        <Picker.Item label="Male" value="male" />
+        <Picker.Item label="Female" value="female" />
+      </Picker>
       <TextInput
         style={styles.input}
         value={Telefon}
@@ -189,6 +197,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     fontSize: 16,
   },
+  
   button: {
     backgroundColor: "#ff5e3a",
     paddingVertical: 15,

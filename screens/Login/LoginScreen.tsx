@@ -21,6 +21,7 @@ import {
 } from "firebase/auth";
 import Toast from "react-native-toast-message";
 import { doc, getDoc } from "firebase/firestore";
+import Role from "../enums/user_role"
 
 
 export const LoginScreen: React.FC = () => {
@@ -63,7 +64,7 @@ export const LoginScreen: React.FC = () => {
       const user = userCredential.user;
       const role = await getUserRole(user.uid);
 
-      if (role === "admin") {
+      if (role === Role.Admin) {
         goToAdminScreen();
       } else {
         goToHome();
