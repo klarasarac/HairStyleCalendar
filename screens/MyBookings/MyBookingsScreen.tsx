@@ -5,54 +5,15 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Alert,
   Dimensions,
 } from "react-native";
 import { collection, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db, auth } from '../../firebase';
 import Toast from "react-native-toast-message";
 
-
-const { width } = Dimensions.get("window");
-
 export const MyBookingsScreen: React.FC = () => {
   const [bookings, setBookings] = useState<any[]>([]);
-  const [userId, setUserId] = useState<string | null>(null);
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        setUserId(user.uid);
-        fetchBookings(user.uid);
-      } else {
-        setUserId(null);
-        setBookings([]);
-      }
-    });
-
-    return unsubscribe;
-  }, []);
-
-  const fetchBookings = async (uid: string) => {
-    try {
-      const q = query(collection(db, "bookings"), where("userId", "==", uid));
-      const querySnapshot = await getDocs(q);
-      const fetchedBookings: any[] = [];
-      querySnapshot.forEach((doc) => {
-        fetchedBookings.push({ id: doc.id, ...doc.data() });
-      });
-      setBookings(fetchedBookings);
-    } catch (e) {
-      console.error("Error fetching bookings: ", e);
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: 'Something went wrong while fetching your bookings. Please try again.'
-      });
-    }
-  };
- 
-
+  
   const handleCancelBooking = async (bookingId: string) => {
     try {
       await deleteDoc(doc(db, "bookings", bookingId));

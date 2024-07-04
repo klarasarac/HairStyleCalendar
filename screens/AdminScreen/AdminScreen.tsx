@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  TextInput,
   Alert,
   Dimensions,
 } from "react-native";
@@ -13,8 +12,6 @@ import { collection, query, getDocs, deleteDoc, doc, updateDoc, where } from 'fi
 import { db } from '../../firebase';
 import Toast from "react-native-toast-message";
 import Role from "../enums/user_role"; 
-
-const { width } = Dimensions.get("window");
 
 interface Reservation {
   id: string;
@@ -27,7 +24,6 @@ interface Reservation {
 
 export const AdminScreen: React.FC = () => {
   const [reservations, setReservations] = useState<Reservation[]>([]);
-  const [newAdminEmail, setNewAdminEmail] = useState<string>('');
 
   useEffect(() => {
     const fetchReservations = async () => {
@@ -67,37 +63,6 @@ export const AdminScreen: React.FC = () => {
         type: 'error',
         text1: 'Error',
         text2: 'Something went wrong while deleting the reservation. Please try again.'
-      });
-    }
-  };
-
-  const handleAddAdmin = async () => {
-    if (!newAdminEmail) {
-      Alert.alert('Error', 'Please enter an email');
-      return;
-    }
-
-    try {
-      const usersCollection = collection(db, 'users');
-      const userSnapshot = await getDocs(query(usersCollection, where("email", "==", newAdminEmail)));
-      if (userSnapshot.empty) {
-        Alert.alert('Error', 'User not found');
-        return;
-      }
-
-      const userDoc = userSnapshot.docs[0];
-      await updateDoc(doc(db, 'users', userDoc.id), { role: Role.Admin });
-      Toast.show({
-        type: 'success',
-        text1: 'Success',
-        text2: `User ${newAdminEmail} is now an admin`,
-      });
-    } catch (error: any) {
-      console.error(error);
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: error.message || 'Something went wrong',
       });
     }
   };
