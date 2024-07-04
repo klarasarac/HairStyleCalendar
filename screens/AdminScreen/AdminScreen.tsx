@@ -12,7 +12,7 @@ import {
 import { collection, query, getDocs, deleteDoc, doc, updateDoc, where } from 'firebase/firestore';
 import { db } from '../../firebase';
 import Toast from "react-native-toast-message";
-import Role from "../enums/user_role"; // Uvezi Role enum
+import Role from "../enums/user_role"; 
 
 const { width } = Dimensions.get("window");
 

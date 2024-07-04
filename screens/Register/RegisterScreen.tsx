@@ -27,11 +27,12 @@ export const RegisterScreen: React.FC = () => {
   const [Spol, setGender] = useState("");
 
   const nav = useNavigation<NativeStackNavigationProp<any>>();
+  
   const goToLogin = async () => {
     nav.navigate("Login");
   };
 
-  const createProfile = async (response: any, role:Role) => {
+  const createProfile = async (response: any, role: Role) => {
     const usersCollection = collection(db, "users");
     const userDoc = doc(usersCollection, response.user.uid);
 
@@ -42,7 +43,7 @@ export const RegisterScreen: React.FC = () => {
       Telefon,
       Spol,
       Datum_rodjenja,
-      role,  // Dodavanje uloge korisnika
+      role, 
     });
 
     console.log("User profile created successfully with role:", role);
@@ -72,7 +73,6 @@ export const RegisterScreen: React.FC = () => {
         Lozinka
       );
 
-      // Provera da li je ovo prvi korisnik koji se registruje
       const isFirstUser = (await getDocs(query(collection(db, "users"), limit(1)))).empty;
 
       createProfile(response, isFirstUser ? Role.Admin : Role.User);
@@ -132,10 +132,10 @@ export const RegisterScreen: React.FC = () => {
         placeholderTextColor="#999"
         secureTextEntry={true}
       />
-        <TextInputMask
-        type={'datetime'}
+      <TextInputMask
+        type={"datetime"}
         options={{
-          format: 'DD.MM.YYYY'
+          format: "DD.MM.YYYY",
         }}
         value={Datum_rodjenja}
         onChangeText={setBirthDate}
@@ -144,10 +144,10 @@ export const RegisterScreen: React.FC = () => {
         placeholderTextColor="#999"
         keyboardType="numeric"
       />
-       <Picker
+      <Picker
         selectedValue={Spol}
         style={styles.input}
-        onValueChange={(itemValue:string) => setGender(itemValue)}
+        onValueChange={(itemValue: string) => setGender(itemValue)}
       >
         <Picker.Item label="Select Gender" value="" />
         <Picker.Item label="Male" value="male" />
@@ -161,7 +161,6 @@ export const RegisterScreen: React.FC = () => {
         placeholderTextColor="#999"
         keyboardType="phone-pad"
       />
-
       <TouchableOpacity style={styles.button} onPress={registerAndGoToMainFlow}>
         <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
@@ -181,33 +180,27 @@ const styles = StyleSheet.create({
     backgroundColor: "#f2f2f0",
   },
   title: {
-    fontSize: 24,
+    fontSize: 36,
+    fontWeight: "bold",
     color: "#2c365d",
     marginBottom: 20,
-    fontWeight: "bold",
   },
   input: {
-    height: 50,
     width: "100%",
+    height: 50,
+    fontSize: 18,
+    borderBottomWidth: 1,
     borderColor: "#ccc",
-    borderWidth: 1,
     marginBottom: 20,
-    paddingHorizontal: 15,
-    borderRadius: 25,
-    backgroundColor: "#fff",
-    fontSize: 16,
+    paddingLeft: 10,
   },
-  
   button: {
+    width: "100%",
+    height: 50,
     backgroundColor: "#ff5e3a",
-    paddingVertical: 15,
-    paddingHorizontal: 50,
     borderRadius: 25,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.8,
-    shadowRadius: 3,
-    elevation: 5,
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: 20,
   },
   buttonText: {

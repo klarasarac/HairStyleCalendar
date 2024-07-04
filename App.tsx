@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Button, View, ActivityIndicator } from "react-native";
@@ -18,6 +19,7 @@ import { getUserData, saveUserData, removeUserData } from './utils/storageUtils'
 import Role from './screens/enums/user_role';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from './firebase';
+import { TouchableOpacity, Image } from 'react-native';
 
 export type RootStackParamList = {
   WomenScreen: { hairStyle: "Women" };
@@ -97,12 +99,14 @@ const App = () => {
                   headerStyle: {
                     backgroundColor: "rgb(28 35 48)",
                   },
+                
                   headerRight: () => (
-                    <Button
-                      onPress={handleLogout}
-                      title="Logout"
-                      color="#ff5e3a"
-                    />
+                    <TouchableOpacity onPress={handleLogout}>
+                      <Image
+                        source={require("../HairStyleCalendar/assets/logout.png")} 
+                        style={{ width: 20, height: 20, marginRight: 10 }} 
+                      />
+                    </TouchableOpacity>
                   ),
                 }}
               />
@@ -120,11 +124,12 @@ const App = () => {
                       backgroundColor: "rgb(28 35 48)",
                     },
                     headerRight: () => (
-                      <Button
-                        onPress={handleLogout}
-                        title="Logout"
-                        color="#ff5e3a"
-                      />
+                      <TouchableOpacity onPress={handleLogout}>
+                        <Image
+                          source={require("../HairStyleCalendar/assets/logout.png")} 
+                          style={{ width: 20, height: 20, marginRight: 10 }} 
+                        />
+                      </TouchableOpacity>
                     ),
                   }}
                 />

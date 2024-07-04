@@ -14,27 +14,15 @@ import { db, auth } from "../../firebase";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "../../App";
 import { useHandleConfirm } from "../../utils/useHandleConfirm";
-import { ServiceTypes, getServiceOptions } from "../../utils/serviceTypes";
+import { ServiceTypesMen, getServiceOptions } from "../../utils/serviceTypesMen";
 import { useDateAndTime, useUserData } from "../../hooks/hooks";
 import { getDisabledSlots } from "../../utils/getDisableSlots";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-
-//const times = ["9:00", "10:00", "11:00", "12:00","13:00", "14:00", "15:00", "16:00","17:00"];
 const { width } = Dimensions.get("window");
 
-// const getDaysInMonth = () => {
-//   const start = startOfMonth(new Date());
-//   const end = endOfMonth(new Date());
-//   return eachDayOfInterval({ start, end }).map(date => format(date, 'EEE dd'));
-// };
 type MenScreenRouteProp = RouteProp<RootStackParamList, 'MenScreen'>;
 
 export const MenScreen: React.FC = () => {
-
-
-
 
   const route = useRoute<MenScreenRouteProp>();
   const userId = useUserData();
@@ -42,7 +30,9 @@ export const MenScreen: React.FC = () => {
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [selectedService, setSelectedService] = useState<string | null>(null);
-  const [disabledSlots, setDisabledSlots] = useState< { day: string; time: string }[]>([]);
+  const [disabledSlots, setDisabledSlots] = useState<
+    { day: string; time: string }[]
+  >([]);
 
   const handleDaySelection = (day: string) => {
     setSelectedDay(day);
@@ -51,7 +41,6 @@ export const MenScreen: React.FC = () => {
   const handleTimeSelection = (time: string) => {
     setSelectedTime(time);
   };
-  
 
   const handleConfirm = useHandleConfirm(
     selectedService,
@@ -59,8 +48,7 @@ export const MenScreen: React.FC = () => {
     selectedTime,
     userId,
     route.params.hairStyle,
-    db,
-  
+    db
   );
 
   useEffect(() => {
@@ -72,7 +60,6 @@ export const MenScreen: React.FC = () => {
     fetchDisabledSlots();
   }, [daysOfMonth, times]);
 
-  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Booking</Text>
@@ -95,7 +82,6 @@ export const MenScreen: React.FC = () => {
               selectedDay === day && styles.selectedDayButton,
             ]}
             onPress={() => handleDaySelection(day)}
-            
           >
             <Text
               style={[
@@ -140,7 +126,7 @@ export const MenScreen: React.FC = () => {
       <View style={styles.selectionSummary}>
         <Text>
           Selected Service:
-          {ServiceTypes[selectedService as keyof typeof ServiceTypes] || "None"}
+          {ServiceTypesMen[selectedService as keyof typeof ServiceTypesMen] || "None"}
         </Text>
         <Text>Selected Day: {selectedDay || "None"}</Text>
         <Text>Selected Time: {selectedTime || "None"}</Text>
