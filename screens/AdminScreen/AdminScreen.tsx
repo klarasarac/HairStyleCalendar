@@ -5,13 +5,10 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Alert,
-  Dimensions,
 } from "react-native";
 import { collection, query, getDocs, deleteDoc, doc, updateDoc, where } from 'firebase/firestore';
 import { db } from '../../firebase';
 import Toast from "react-native-toast-message";
-import Role from "../enums/user_role"; 
 
 interface Reservation {
   id: string;
@@ -172,4 +169,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AdminScreen;

@@ -93,6 +93,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f2f2f0",
+    paddingHorizontal: 20,
   },
   scrollViewContainer: {
     alignItems: "center",
@@ -100,24 +101,22 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   welcomeText: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: "bold",
     color: "#2c365d",
     marginVertical: 20,
     textAlign: "center",
   },
   card: {
-    width: "80%",
-    backgroundColor: "#fff",
+    width: "90%",
     borderRadius: 20,
     marginBottom: 20,
-    borderWidth: 1,
-    borderColor: "#ccc",
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 5,
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 8,
+    overflow: "hidden",
   },
   cardInner: {
     padding: 20,
@@ -130,6 +129,12 @@ const styles = StyleSheet.create({
     borderRadius: 75,
     marginBottom: 20,
   },
+  cardGardient: {
+    padding:25,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  
   cardTitle: {
     fontSize: 18,
     fontWeight: "bold",
@@ -138,5 +143,3 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 });
-
-export default ProfilScreen;
