@@ -20,7 +20,7 @@ const { width } = Dimensions.get("window");
 
 type WomenScreenRouteProp = RouteProp<RootStackParamList, "WomenScreen">;
 
-export const WomenScreenCopy: React.FC = () => {
+export const WomenScreen: React.FC = () => {
   const route = useRoute<WomenScreenRouteProp>();
   const userId = useUserData();
   const { daysOfMonth, times } = useDateAndTime();

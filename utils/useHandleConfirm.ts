@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp, } from "@react-navigation/native-stack/lib/typescript/src/types";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
 
 export const useHandleConfirm = (
   selectedService: string | null,
@@ -12,7 +12,9 @@ export const useHandleConfirm = (
   hairStyle: string | null,
   db: any
 ) => {
-    const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
+  const goToHome = () => navigation.navigate("Profil");
   return useCallback(async () => {
     if (
       !["hair_cut_color", "hair_cut", "hair_color"].includes(
@@ -51,8 +53,8 @@ export const useHandleConfirm = (
         text2: "Please log in to make a booking.",
       });
       return;
-    } 
-    
+    }
+
     try {
       const bookingRef = collection(db, "bookings");
       const docRef = await addDoc(bookingRef, {
@@ -62,6 +64,7 @@ export const useHandleConfirm = (
         time: selectedTime,
         userId: userId,
         createdAt: new Date(),
+       
       });
       console.log("Document written with ID: ", docRef.id);
       Toast.show({
@@ -69,7 +72,7 @@ export const useHandleConfirm = (
         text1: "Booking Confirmed",
         text2: `Your booking ID is ${docRef.id}`,
       });
-      navigation.navigate("Profil");
+      goToHome();
     } catch (e) {
       console.error("Error adding document: ", e);
       Toast.show({
