@@ -48,12 +48,12 @@ export const ProfilScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.headerText}>Services</Text>
       {user ? (
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollViewContainer}
         >
-          <Text style={styles.welcomeText}>Welcome, {user.email}!</Text>
           <TouchableOpacity style={styles.card} onPress={goToWomenHairstyles}>
             <View style={styles.cardInner}>
               <Image
@@ -83,7 +83,7 @@ export const ProfilScreen: React.FC = () => {
           </TouchableOpacity>
         </ScrollView>
       ) : (
-        <Text>Loading...</Text>
+        <Text style={styles.loadingText}>Loading...</Text>
       )}
     </View>
   );
@@ -92,54 +92,52 @@ export const ProfilScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f2f2f0",
+    backgroundColor: "#1c2330", 
     paddingHorizontal: 20,
   },
-  scrollViewContainer: {
-    alignItems: "center",
-    paddingTop: 20,
-    paddingBottom: 40,
-  },
-  welcomeText: {
-    fontSize: 30,
+  headerText: {
+    fontSize: 28,
     fontWeight: "bold",
-    color: "#2c365d",
+    color: "#f2f2f0", 
     marginVertical: 20,
     textAlign: "center",
   },
+  loadingText: {
+    fontSize: 18,
+    color: "#F2AA4C",
+    textAlign: "center",
+  },
+  scrollViewContainer: {
+    alignItems: "center",
+  },
   card: {
-    width: "90%",
-    borderRadius: 20,
+    width: "100%",
+    borderRadius: 10,
     marginBottom: 20,
+    backgroundColor: "#272e4f",
+    padding: 20,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.1,
     shadowRadius: 10,
     elevation: 8,
     overflow: "hidden",
+    flexDirection: "row",
+    alignItems: "center",
   },
   cardInner: {
-    padding: 20,
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
   },
   cardImage: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
-    marginBottom: 20,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: 20,
   },
-  cardGardient: {
-    padding:25,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  
   cardTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#ff5e3a",
-    textAlign: "center",
-    marginTop: 10,
+    color: "#f2f2f0", 
   },
 });

@@ -44,7 +44,9 @@ export const MyBookingsScreen: React.FC = () => {
               <Text style={styles.bookingText}>Service: {booking.service}</Text>
               <Text style={styles.bookingText}>Day: {booking.day}</Text>
               <Text style={styles.bookingText}>Time: {booking.time}</Text>
-              <Text style={styles.bookingText}>Hair Style: {booking.hairStyle}</Text>
+              <Text style={styles.bookingText}>
+                Hair Style: {booking.hairStyle}
+              </Text>
               <TouchableOpacity
                 style={styles.cancelButton}
                 onPress={() => handleCancelBooking(booking.id)}

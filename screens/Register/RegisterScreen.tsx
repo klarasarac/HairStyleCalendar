@@ -123,6 +123,7 @@ export const RegisterScreen: React.FC = () => {
     }
   };
 
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -193,11 +194,20 @@ export const RegisterScreen: React.FC = () => {
             keyboardType="phone-pad"
           />
         </View>
-        <TouchableOpacity style={styles.button} onPress={registerAndGoToMainFlow}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={registerAndGoToMainFlow}
+        >
           <Text style={styles.buttonText}>Register</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.googleButton} onPress={signInWithGoogle}>
-          <Image source={require("../../assets/google.png")} style={styles.googleIcon} />
+        <TouchableOpacity
+          style={styles.googleButton}
+          onPress={signInWithGoogle}
+        >
+          <Image
+            source={require("../../assets/google.png")}
+            style={styles.googleIcon}
+          />
           <Text style={styles.googleButtonText}>Register with Google</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -208,7 +218,7 @@ export const RegisterScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f2f2f0",
+    backgroundColor: "#1c2330",
     padding: 20,
   },
   headerContainer: {
@@ -218,7 +228,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 20,
-    color: "#2c365d",
+    color: "#f2f2f0",
     marginHorizontal: 15,
   },
   activeTab: {
