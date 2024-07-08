@@ -5,10 +5,9 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Dimensions,
 } from "react-native";
-import { collection, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
-import { db, auth } from '../../firebase';
+import { deleteDoc, doc } from 'firebase/firestore';
+import { db } from '../../firebase';
 import Toast from "react-native-toast-message";
 
 export const MyBookingsScreen: React.FC = () => {
@@ -106,5 +105,3 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
-
-export default MyBookingsScreen;
