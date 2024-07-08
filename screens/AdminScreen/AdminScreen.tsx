@@ -98,12 +98,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#f2f2f0",
+    backgroundColor: "#1c2330",
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#2c365d",
+    color: "#f2f2f0",
     textAlign: "center",
     marginBottom: 20,
   },
@@ -168,4 +168,3 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
-

@@ -29,7 +29,7 @@ export const LoginScreen: React.FC = () => {
     nav.push("Register");
   };
 
-  const goToHome = async () => {
+  const goToHome =  () => {
     nav.navigate("Profil");
   };
 
