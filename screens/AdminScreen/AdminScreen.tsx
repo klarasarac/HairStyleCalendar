@@ -123,14 +123,14 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   bookingItem: {
-    backgroundColor: "#e0e0e0",
+    backgroundColor: "#272e4f",
     padding: 15,
     borderRadius: 10,
     marginBottom: 15,
   },
   bookingText: {
     fontSize: 16,
-    color: "#2c365d",
+    color: "#f2f2f0",
     marginBottom: 5,
   },
   cancelButton: {

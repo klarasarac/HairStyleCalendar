@@ -10,6 +10,8 @@ import {
 import { collection, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db, auth } from '../../firebase';
 import Toast from "react-native-toast-message";
+import { ServiceTypes} from "../../utils/serviceTypes";
+import { ServiceTypesMen} from "../../utils/serviceTypesMen";
 
 
 const { width } = Dimensions.get("window");
@@ -70,7 +72,11 @@ export const MyBookingsScreen: React.FC = () => {
       });
     }
   };
-
+  const getServiceDisplayName = (serviceKey: string) => {
+    return ServiceTypes[serviceKey as keyof typeof ServiceTypes] || ServiceTypesMen[serviceKey as keyof typeof ServiceTypesMen] || serviceKey;
+  };
+  
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>My Bookings</Text>
@@ -80,7 +86,7 @@ export const MyBookingsScreen: React.FC = () => {
         ) : (
           bookings.map((booking) => (
             <View key={booking.id} style={styles.bookingItem}>
-              <Text style={styles.bookingText}>Service: {booking.service}</Text>
+              <Text style={styles.bookingText}>Service: {getServiceDisplayName(booking.service)}</Text>
               <Text style={styles.bookingText}>Day: {booking.day}</Text>
               <Text style={styles.bookingText}>Time: {booking.time}</Text>
               <Text style={styles.bookingText}>
@@ -123,14 +129,14 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   bookingItem: {
-    backgroundColor: "#e0e0e0",
+    backgroundColor: "#272e4f",
     padding: 15,
     borderRadius: 10,
     marginBottom: 15,
   },
   bookingText: {
     fontSize: 16,
-    color: "#2c365d",
+    color: "#f2f2f0",
     marginBottom: 5,
   },
   cancelButton: {
