@@ -15,7 +15,7 @@ import { useHandleConfirm } from "../../utils/useHandleConfirm";
 import { getServiceOptions } from "../../utils/serviceTypesMen";
 import { useDateAndTime, useUserData } from "../../hooks/hooks";
 import { getDisabledSlots } from "../../utils/getDisableSlots";
-
+import { isToday, parse, getHours } from "date-fns";
 
 const { width } = Dimensions.get("window");
 
@@ -57,6 +57,17 @@ export const MenScreen: React.FC = () => {
     fetchDisabledSlots();
   }, [daysOfMonth, times]);
 
+  const filterTimes = (times: string[], selectedDay: string | null) => {
+    if (selectedDay && isToday(parse(selectedDay, "EEE dd", new Date()))) {
+      const currentHour = getHours(new Date());
+      return times.filter(time => {
+        const [hour] = time.split(":");
+        return parseInt(hour) > currentHour;
+      });
+    }
+    return times;
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Appointment</Text>
@@ -86,7 +97,7 @@ export const MenScreen: React.FC = () => {
 
       <Text style={styles.subtitle}>Available Slots</Text>
       <ScrollView horizontal contentContainerStyle={styles.timeContainer}>
-        {times.map((time) => {
+        {filterTimes(times, selectedDay).map((time) => {
           const isDisabled = disabledSlots.some(
             (slot) => slot.day === selectedDay && slot.time === time
           );
