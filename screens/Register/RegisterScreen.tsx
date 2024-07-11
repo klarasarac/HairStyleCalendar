@@ -1,5 +1,12 @@
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { collection, doc, setDoc, getDocs, query, limit } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  setDoc,
+  getDocs,
+  query,
+  limit,
+} from "firebase/firestore";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -17,7 +24,7 @@ import Toast from "react-native-toast-message";
 import Role from "../enums/user_role";
 import { TextInputMask } from "react-native-masked-text";
 import { Picker } from "@react-native-picker/picker";
-import { Pressable } from 'react-native';
+import { Pressable } from "react-native";
 
 export const RegisterScreen: React.FC = () => {
   const [Ime, setFirstName] = useState("");
@@ -37,7 +44,7 @@ export const RegisterScreen: React.FC = () => {
   const createProfile = async (user: any, role: Role) => {
     const usersCollection = collection(db, "users");
     const userDoc = doc(usersCollection, user.uid);
-
+   
     await setDoc(userDoc, {
       Ime,
       Prezime,
@@ -45,7 +52,7 @@ export const RegisterScreen: React.FC = () => {
       Telefon,
       Spol,
       Datum_rodjenja,
-      role, 
+      role,
     });
 
     console.log("User profile created successfully with role:", role);
@@ -74,8 +81,12 @@ export const RegisterScreen: React.FC = () => {
         Email,
         Lozinka
       );
+      console.log(response.user);
 
-      const isFirstUser = (await getDocs(query(collection(db, "users"), limit(1)))).empty;
+      const isFirstUser = (
+        await getDocs(query(collection(db, "users"), limit(1)))
+      ).empty;
+      console.log(db, "db");
 
       await createProfile(response.user, isFirstUser ? Role.Admin : Role.User);
       setFirstName("");
@@ -105,7 +116,9 @@ export const RegisterScreen: React.FC = () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      const isFirstUser = (await getDocs(query(collection(db, "users"), limit(1)))).empty;
+      const isFirstUser = (
+        await getDocs(query(collection(db, "users"), limit(1)))
+      ).empty;
       await createProfile(user, isFirstUser ? Role.Admin : Role.User);
       Toast.show({
         type: "success",
@@ -122,7 +135,6 @@ export const RegisterScreen: React.FC = () => {
       });
     }
   };
-
 
   return (
     <View style={styles.container}>
