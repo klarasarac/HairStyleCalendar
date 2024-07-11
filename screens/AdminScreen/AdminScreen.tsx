@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#2c365d',
+    color: '#f2f2f0',
     marginBottom: 10,
   },
   bookingsContainer: {

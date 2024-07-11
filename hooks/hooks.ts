@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { format, startOfMonth, endOfMonth, eachDayOfInterval } from "date-fns";
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, isBefore } from "date-fns";
 import { auth } from "../firebase";
 
 export const useUserData = () => {
@@ -42,6 +42,17 @@ export const useDateAndTime = () => {
     };
 
     setDaysOfMonth(getDaysInMonth());
+    const filterPastDates = (days: string[]) => {
+      const today = format(new Date(), "EEE dd");
+      return days.filter((day) => {
+        const [dayName, dayNumber] = day.split(" ");
+        const formattedDate = format(new Date(new Date().getFullYear(), new Date().getMonth(), parseInt(dayNumber)), "EEE dd");
+        return !isBefore(new Date(formattedDate), new Date(today));
+      });
+    };
+
+    const daysInMonth = getDaysInMonth();
+    setDaysOfMonth(filterPastDates(daysInMonth));
     setTimes(generateTimes(9, 17));
   }, []);
 

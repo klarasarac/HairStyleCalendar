@@ -12,9 +12,9 @@ import { db  } from "../../firebase";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "../../App";
 import { useHandleConfirm } from "../../utils/useHandleConfirm";
-import { ServiceTypes, getServiceOptions } from "../../utils/serviceTypes";
 import { useDateAndTime, useUserData } from "../../hooks/hooks";
 import { getDisabledSlots } from "../../utils/getDisableSlots";
+import { getServiceOptions } from "../../utils/serviceTypes";
 
 const { width } = Dimensions.get("window");
 
@@ -27,9 +27,7 @@ export const WomenScreen: React.FC = () => {
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [selectedService, setSelectedService] = useState<string | null>(null);
-  const [disabledSlots, setDisabledSlots] = useState<
-    { day: string; time: string }[]
-  >([]);
+  const [disabledSlots, setDisabledSlots] = useState<{ day: string; time: string }[]>([]);
 
   const handleDaySelection = (day: string) => {
     setSelectedDay(day);

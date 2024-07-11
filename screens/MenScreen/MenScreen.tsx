@@ -16,6 +16,7 @@ import { getServiceOptions } from "../../utils/serviceTypesMen";
 import { useDateAndTime, useUserData } from "../../hooks/hooks";
 import { getDisabledSlots } from "../../utils/getDisableSlots";
 
+
 const { width } = Dimensions.get("window");
 
 type MenScreenRouteProp = RouteProp<RootStackParamList, 'MenScreen'>;
@@ -28,9 +29,7 @@ export const MenScreen: React.FC = () => {
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [selectedService, setSelectedService] = useState<string | null>(null);
-  const [disabledSlots, setDisabledSlots] = useState<
-    { day: string; time: string }[]
-  >([]);
+  const [disabledSlots, setDisabledSlots] = useState<{ day: string; time: string }[]>([]);
 
   const handleDaySelection = (day: string) => {
     setSelectedDay(day);
