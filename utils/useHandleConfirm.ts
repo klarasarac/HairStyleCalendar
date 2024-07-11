@@ -17,7 +17,7 @@ export const useHandleConfirm = (
   const goToHome = () => navigation.navigate("Profil");
   return useCallback(async () => {
     if (
-      !["hair_cut_color", "hair_cut", "hair_color"].includes(
+      !["hair_cut_color", "hair_cut", "hair_color","shave","hair_cut_shave"].includes(
         selectedService || ""
       )
     ) {
